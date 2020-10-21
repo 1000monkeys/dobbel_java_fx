@@ -6,16 +6,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.Slider;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.ResourceBundle;
 
 
-public class Controller {
+public class Controller implements Initializable {
     @FXML
     private ImageView imageView;
 
@@ -23,25 +26,46 @@ public class Controller {
     private ListView listView;
 
     @FXML
-    private Slider slider;
+    private Button button;
 
-    public void setImage(){
-        File file = new File("six.png");
+    @FXML
+    private ToggleGroup amountDice;
 
-        Image image = new Image(file.toURI().toString());
+    private Image[] diceImages = new Image[6];
 
-        imageView.setImage(image);
+    private ArrayList arrayList;
+    private ObservableList<String> observableList;
 
-        ArrayList tempList = new ArrayList();
-        for (int i = 0; i < 100; i++) {
-            tempList.add("Number " + i);
+    public Controller(){
+        diceImages[0] = new Image("one.png");
+        diceImages[1] = new Image("two.png");
+        diceImages[2] = new Image("three.png");
+        diceImages[3] = new Image("four.png");
+        diceImages[4] = new Image("five.png");
+        diceImages[5] = new Image("six.png");
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        arrayList = new ArrayList();
+        observableList = FXCollections.observableList(arrayList);
+        listView.setItems(observableList);
+    }
+
+    public void rollDice(){
+        RadioButton selectedRadioButton = (RadioButton) amountDice.getSelectedToggle();
+        int toggleGroupValue = Integer.parseInt(selectedRadioButton.getText());
+
+        List<Integer> results = new ArrayList();
+
+        for(int i = 0; i < toggleGroupValue; i++) {
+            results.add(new Random().nextInt(6) + 1);
         }
-        ObservableList<String> list = FXCollections.observableList(tempList);
 
-        listView.setItems(list);
-
-        slider.setMin(3);
-        slider.setMax(5);
-        slider.setBlockIncrement(1);
+        String resultString = "";
+        for (int j = 0; j < results.size(); j++){
+            resultString += "[" + results.get(j) + "]";
+        }
+        observableList.add(resultString);
     }
 }
