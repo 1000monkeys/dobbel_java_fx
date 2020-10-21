@@ -10,6 +10,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,13 +21,13 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
     @FXML
-    private ImageView imageView;
-
-    @FXML
     private ListView listView;
 
     @FXML
     private Button button;
+
+    @FXML
+    private VBox vBox;
 
     @FXML
     private ToggleGroup amountDice;
@@ -60,6 +61,17 @@ public class Controller implements Initializable {
 
         for(int i = 0; i < toggleGroupValue; i++) {
             results.add(new Random().nextInt(6) + 1);
+        }
+
+        vBox.getChildren().removeAll(vBox.getChildren());
+        for (int i = 0 ; i < results.size(); i++) {
+            ImageView imageView = new ImageView();
+            imageView.setImage(diceImages[results.get(i) - 1]);
+
+            imageView.setFitHeight(50);
+            imageView.setFitWidth(50);
+
+            vBox.getChildren().add(imageView);
         }
 
         String resultString = "";
